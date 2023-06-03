@@ -104,7 +104,7 @@ exports.register = (req, res) => {
                 });
             }
         })
-})
+    })
     const publicPath = path.resolve('public');
     const loginFilePath = path.join(publicPath, 'login.html');
     res.sendFile(loginFilePath);
