@@ -5,13 +5,16 @@ const router = express.Router();
 
 router.post('/register', authController.register)
 router.post('/login', authController.login);
-router.get('/logout', authController.logout);
-router.post("/notes/add", authController.addNote)
+router.get('/logout1', authController.logout);
+router.get('/logout', (req, res) => {
+   localStorage.getItem("email")
+   localStorage.clear();
 
-router.post("/postNotes", (req, res) => {
-    const {userToken} = req.body 
-    res.sendFile(__dirname + "/public/yourNotes.html")
-})
+    res.send('Logged out successfully');
+  });
+  
+router.post("/notes/add", authController.addNote)
+router.post("/notes/get", authController.fetchNotes)
 
 
 router.post("/deletenote", (req, res) => {

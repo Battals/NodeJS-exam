@@ -14,7 +14,10 @@ router.get('/login', (req, res) => {
     res.sendFile("login.html", { root: './public/' })
 });
 
+router.get('/logout', (req, res) => {
+    res.sendFile("main.html", { root: './public/' })
 
+});
 
 
 router.get('/profile', authController.isLoggedIn, (req, res) => {

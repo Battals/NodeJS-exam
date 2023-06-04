@@ -21,7 +21,6 @@ exports.login = async (req, res) => {
             })
         }
         db.query('SELECT * FROM users WHERE email = ?', [email], async (err, results) => {
-            console.log(results);
             if (!results || !await bcrypt.compare(password, results[0].password)) {
                 const errorMessage = "Invalid email or password";
 
@@ -43,9 +42,7 @@ exports.login = async (req, res) => {
                     httpOnly: true
                 }
                 res.cookie('userSave', token, cookieOptions);
-                res.sendFile(filePath, { email });    
-                console.log(filePath, { email }); 
-                console.log(email)
+                res.sendFile(filePath, { email });   
                     }
         })
     } catch (err) {
@@ -67,6 +64,19 @@ exports.addNote = (req, res) => {
             db.query("INSERT INTO notes (title, description, userid) VALUES (?,?,?) ", [title, description, userid] )
         }})
     }
+
+    exports.fetchNotes = (req, res) => {
+        const { email } = req.body;
+        db.query("SELECT * FROM notes WHERE userid IN (SELECT id FROM users WHERE email = ?)", [email], (err, results) => {
+          if (err) {
+            console.log(err);
+            res.status(500).json({ error: 'An error occurred while fetching notes.' });
+          } else {
+            res.status(200).json(results);
+          }
+        });
+      };
+      
 
     
 
