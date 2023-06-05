@@ -2,7 +2,6 @@ const mysql = require("mysql");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const { promisify } = require("util");
-const toastr = require("toastr");
 const path = require("path");
 const filePath = path.resolve("public/yourNotes.html");
 
@@ -209,4 +208,4 @@ exports.deleteNote = (req, res) => {
   });
 };
 
-exports.logout = (req, res) => {};
+

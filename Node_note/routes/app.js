@@ -27,4 +27,3 @@ db.connect((err) => {
 app.use('/', require('./routes/pages'));
 app.use('/auth', require('./routes/auth'));
 
-app.listen(5000)

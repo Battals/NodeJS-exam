@@ -50,12 +50,17 @@
     <button style="margin-top: 5px;" type="submit" onclick="onAddNote()" class="btn btn-primary">Create</button>
 
 
+
+
     <h1 class="my-4">Your Notes</h1>
     <div class="mynotes row">
 
       <div id="noteContainer" class="mynotes row"></div>
 
     </div>
+
+
+
 
     <div id="updateFormContainer" style="display: none;">
       <label for="updateTitle">Title</label>
@@ -64,6 +69,7 @@
       <textarea id="updateDescription" name="updateDescription" placeholder="Enter description" required></textarea>
       <button id="updatebtn">Update</button>
     </div>
+
 
 
   </div>
@@ -79,13 +85,12 @@
     });
 
     function updateNote(noteid) {
-      console.log(noteid)
       document.getElementById('updateFormContainer').style.display = 'block';
       const updateButton = document.getElementById('updatebtn');
 
-updateButton.onclick = function() {
-  update(noteid);
-};
+      updateButton.onclick = function () {
+        update(noteid);
+      };
 
     };
 
@@ -109,6 +114,26 @@ updateButton.onclick = function() {
       document.getElementById('updateFormContainer').style.display = 'none';
       window.location.reload()
 
+    }
+
+    function sendEmail(title, content, email) {
+      fetch('/auth/send-email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: JSON.stringify({ title, content, email: email })
+
+      })
+        .then(response => response.json())
+        .then(data => {
+          console.log(data)
+        })
+        .catch(error => {
+
+          console.log(error);
+        });
     }
 
 
@@ -211,6 +236,21 @@ updateButton.onclick = function() {
               updateNote(note.noteId);
             };
 
+            const link3 = document.createElement('a');
+            link3.classList.add('Email');
+            link3.href = '#';
+            link3.textContent = 'Email'
+            link3.onclick = function () {
+              const email = window.prompt('Enter the recipients email.');
+
+
+              if (email) {
+                sendEmail(note.title, note.description, email);
+                alert("Note sent to " + email);
+
+              }
+            };
+
             const noteId = document.createElement('p');
             noteId.innerHTML = `#${note.noteId}`;
             noteId.classList.add('card-text', 'note-id');
@@ -225,6 +265,7 @@ updateButton.onclick = function() {
             cardBody.appendChild(description);
             cardBody.appendChild(link1);
             cardBody.appendChild(link2);
+            cardBody.appendChild(link3);
 
             card.appendChild(cardBody);
             noteContainer.appendChild(card);
@@ -245,46 +286,44 @@ updateButton.onclick = function() {
 
 
 </body>
-<link rel="stylesheet" href="style.css">
 <style>
+  #updateFormContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 5px;
+    border: 2px solid #b9d2fb;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
 
-#updateFormContainer {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: #ffffff;
-  padding: 20px;
-  border-radius: 5px;
-  border: 2px solid #b9d2fb;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
+  #updateFormContainer label {
+    margin-bottom: 5px;
+  }
 
-#updateFormContainer label {
-  margin-bottom: 5px;
-}
+  #updateFormContainer input,
+  #updateFormContainer textarea {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    margin-bottom: 10px;
+    width: 100%;
+  }
 
-#updateFormContainer input,
-#updateFormContainer textarea {
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 3px;
-  margin-bottom: 10px;
-  width: 100%;
-}
-
-#updatebtn {
-  background-color: #4285f4;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 3px;
-  cursor: pointer;
-}
+  #updatebtn {
+    background-color: #4285f4;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 3px;
+    cursor: pointer;
+  }
 
 
   .form-label {
@@ -317,6 +356,8 @@ updateButton.onclick = function() {
     color: #fff;
   }
 
+
+
   .Update {
     font: menu;
     margin: 10px;
@@ -333,6 +374,24 @@ updateButton.onclick = function() {
     background-color: #0d6efd;
     color: #fff;
   }
+
+  .Email {
+    font: menu;
+    display: inline-block;
+    color: #00de00;
+    padding: 1px 5px;
+    background-color: transparent;
+    border: 1px solid #333;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  .Email:hover {
+    background-color: #06b700;
+    color: #fff;
+  }
+
 
 
   .logout-button {

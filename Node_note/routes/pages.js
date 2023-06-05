@@ -7,6 +7,9 @@ router.use(express.urlencoded())
 router.get('/',authController.isLoggedIn, (req, res) => {
     res.sendFile("main.html", { root: './public/' })
 });
+
+router.get("/logout", authController.logout);
+
 router.get('/register', (req, res) => {
     res.sendFile("register.html", { root: './public/' })
 });
@@ -27,4 +30,6 @@ router.get('/profile', authController.isLoggedIn, (req, res) => {
         res.sendFile("login.html", { root: './public/' });
     }
 })
+
+
 module.exports = router;
